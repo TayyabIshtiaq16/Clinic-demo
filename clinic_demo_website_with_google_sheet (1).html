@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Demo Clinic Website</title>
-  <meta name="description" content="Editable clinic website linked to Google Sheet" />
+  <meta name="description" content=" Editable clinic website linked to Google Sheet" />
   <style>
     body { font-family: Arial, sans-serif; margin:0; background:#f7f7f7; color:#333; }
     header { background:linear-gradient(135deg,#2b7cff,#4aa3ff); color:white; padding:30px 20px; text-align:center; border-radius:0 0 15px 15px; }
@@ -73,4 +73,79 @@ document.getElementById('year').innerText = new Date().getFullYear();
 </script>
 
 </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Clinic Website</title>
+  <meta name="description" content="Editable clinic website linked to Google Sheet" />
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f7f7f7; color:#333; }
+    header { background:linear-gradient(135deg,#2b7cff,#4aa3ff); color:white; padding:30px 20px; text-align:center; border-radius:0 0 15px 15px; }
+    section { background:white; margin:20px auto; padding:20px; max-width:800px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.06); }
+    h2 { color:#2b7cff; margin-bottom:10px; }
+    ul { padding-left:20px; }
+    li { margin-bottom:6px; }
+    footer { text-align:center; padding:20px; font-size:0.9rem; color:#666; }
+    .cta-btn { display:inline-block; margin-top:10px; background:#2b7cff; color:white; padding:10px 20px; border-radius:8px; text-decoration:none; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1 id="clinicName">Loading Clinic Name...</h1>
+  <p id="clinicTagline">Loading tagline...</p>
+</header>
+
+<section>
+  <h2>Services</h2>
+  <ul id="services"></ul>
+</section>
+
+<section>
+  <h2>Opening Hours</h2>
+  <p id="timings"></p>
+</section>
+
+<section>
+  <h2>Contact</h2>
+  <p><strong>Phone:</strong> <span id="phone"></span></p>
+  <p><strong>Address:</strong> <span id="address"></span></p>
+  <a href="https://wa.me/1234567890" class="cta-btn" target="_blank">Book via WhatsApp</a>
+</section>
+
+<footer>
+  <p>© <span id="year"></span> Demo Clinic</p>
+</footer>
+
+<script>
+const sheetURL = "PASTE_YOUR_GOOGLE_SHEET_PUBLISHED_CSV_LINK_HERE";
+
+Tabletop.init({
+  key: sheetURL,
+  simpleSheet: true,
+  callback: function(data, tabletop) {
+    const d = data[0]; // first row
+    document.getElementById('clinicName').innerText = d.clinic_name || 'Demo Clinic';
+    document.getElementById('clinicTagline').innerText = d.tagline || 'Your health, our care';
+    document.getElementById('timings').innerText = d.timings || 'Mon-Sat: 9am-6pm';
+    document.getElementById('phone').innerText = d.phone || '+36 123 456 789';
+    document.getElementById('address').innerText = d.address || 'Main Street, City';
+
+    const ul = document.getElementById('services');
+    ul.innerHTML = '';
+    (d.services || 'General Checkup|Dental Care|Physiotherapy').split('|').forEach(service => {
+      if(service){ const li = document.createElement('li'); li.textContent = service; ul.appendChild(li); }
+    });
+  }
+});
+
+document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+
+</body>
 </html>
+
