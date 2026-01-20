@@ -47,7 +47,7 @@
 
 <script>
 // Google Sheet CSV link (publish your sheet first)
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL_QbPe6fNvCiysSvPcDEgaMaXXl0w82bBXCFrhO8dbKgTInocWsIZF20zhrIbxWhJzD9V0OtBxsZo/pubhtml";
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL_QbPe6fNvCiysSvPcDEgaMaXXl0w82bBXCFrhO8dbKgTInocWsIZF20zhrIbxWhJzD9V0OtBxsZo/pub?output=csv";
 
 fetch(sheetURL)
   .then(res => res.ok ? res.text() : Promise.reject('Sheet not accessible'))
