@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo Clinic Website</title>
+  <meta name="description" content="Editable clinic website linked to Google Sheet" />
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f7f7f7; color:#333; }
+    header { background:linear-gradient(135deg,#2b7cff,#4aa3ff); color:white; padding:30px 20px; text-align:center; border-radius:0 0 15px 15px; }
+    section { background:white; margin:20px auto; padding:20px; max-width:800px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.06); }
+    h2 { color:#2b7cff; margin-bottom:10px; }
+    ul { padding-left:20px; }
+    li { margin-bottom:6px; }
+    footer { text-align:center; padding:20px; font-size:0.9rem; color:#666; }
+    .error { color:#b00020; text-align:center; padding:20px; }
+    .cta-btn { display:inline-block; margin-top:10px; background:#2b7cff; color:white; padding:10px 20px; border-radius:8px; text-decoration:none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 id="clinicName">Loading Clinic Name...</h1>
+  <p id="clinicTagline">Loading tagline...</p>
+</header>
+
+<section>
+  <h2>Services</h2>
+  <ul id="services"></ul>
+</section>
+
+<section>
+  <h2>Opening Hours</h2>
+  <p id="timings"></p>
+</section>
+
+<section>
+  <h2>Contact</h2>
+  <p><strong>Phone:</strong> <span id="phone"></span></p>
+  <p><strong>Address:</strong> <span id="address"></span></p>
+  <a href="https://wa.me/1234567890" class="cta-btn" target="_blank">Book via WhatsApp</a>
+</section>
+
+<footer>
+  <p>© <span id="year"></span> Demo Clinic</p>
+</footer>
+
+<script>
+// Google Sheet CSV link (publish your sheet first)
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL_QbPe6fNvCiysSvPcDEgaMaXXl0w82bBXCFrhO8dbKgTInocWsIZF20zhrIbxWhJzD9V0OtBxsZo/pubhtml";
+
+fetch(sheetURL)
+  .then(res => res.ok ? res.text() : Promise.reject('Sheet not accessible'))
+  .then(csv => {
+    const rows = csv.split("\n").map(r => r.split(","));
+    const data = Object.fromEntries(rows.map(r => [r[0]?.trim(), r[1]?.trim()]));
+
+    document.getElementById('clinicName').innerText = data.clinic_name || 'Demo Clinic';
+    document.getElementById('clinicTagline').innerText = data.tagline || 'Your health, our care';
+    document.getElementById('timings').innerText = data.timings || 'Mon-Sat: 9am-6pm';
+    document.getElementById('phone').innerText = data.phone || '+36 123 456 789';
+    document.getElementById('address').innerText = data.address || 'Main Street, City';
+
+    const ul = document.getElementById('services');
+    ul.innerHTML = '';
+    (data.services || 'General Checkup|Dental Care|Physiotherapy').split('|').forEach(service => {
+      if(service){ const li = document.createElement('li'); li.textContent = service; ul.appendChild(li); }
+    });
+  })
+  .catch(() => document.body.innerHTML='<p class="error">Unable to load clinic data.</p>');
+
+document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+
+</body>
+</html>
